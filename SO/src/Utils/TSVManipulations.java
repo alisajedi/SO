@@ -21,7 +21,7 @@ import Utils.Constants.FieldType;
 import Utils.Constants.JoinType;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
-import Utils.Constants.LogicalOperand;
+import Utils.Constants.LogicalOperation;
 import Utils.Constants.ConditionType;
 import Utils.Constants.SortOrder;
 
@@ -32,19 +32,19 @@ public class TSVManipulations {
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	public static TreeMap<String, String[]> readUniqueKeyAndItsValueFromTSV(String inputPathAndFileName, Set<String> keySetToCheckExistenceOfKeyField, 
 			int keyFieldNumber, int totalFieldsCount, String fieldNumbersToBeRead_separatedByDollar, 
-			LogicalOperand logicalOperand, 
+			LogicalOperation logicalOperation, 
 			int field1Number, ConditionType condition1Type, String field1Value, FieldType field1Type, 
 			int field2Number, ConditionType condition2Type, String field2Value, FieldType field2Type, 
 			boolean wrapOutputInLines, int showProgressInterval, int indentationLevel, long testOrReal, String writeMessageStep){//This method reads TSV lines into HashMap. The key is a unique field and value is a String[] containing all the values of that row. 
 		if (wrapOutputInLines)
-			System.out.println("-----------------------------------");
+			MyUtils.println("-----------------------------------", indentationLevel);
 		TreeMap<String, String[]> tsvRecordsHashMap = new TreeMap<String, String[]>();
 		try{ 
 			BufferedReader br;
 			//Reading posts and adding <repoId, totalNumberOfMembers> in a hashMap:
 			br = new BufferedReader(new FileReader(inputPathAndFileName)); 
-			System.out.println(MyUtils.indent(indentationLevel) + writeMessageStep + "- Parsing " + inputPathAndFileName + ":");
-			System.out.println(MyUtils.indent(indentationLevel+1) + "Started ...");
+			MyUtils.println(writeMessageStep + "- Parsing " + inputPathAndFileName + ":", indentationLevel);
+			MyUtils.println("Started ...", indentationLevel);
 			int error1 = 0, error2 = 0, unmatchedRecords = 0;;
 			int i=0, matchedRec = 0;
 			String s, keyField;
@@ -53,7 +53,7 @@ public class TSVManipulations {
 			while ((s=br.readLine())!=null){
 				String[] fields = s.split("\t");
 				if (fields.length == totalFieldsCount){
-					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperand, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
+					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperation, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
 					if (recordShouldBeRead){
 						keyField = fields[keyFieldNumber];
 						if (keySetToCheckExistenceOfKeyField == null || keySetToCheckExistenceOfKeyField.contains(keyField)){
@@ -89,7 +89,7 @@ public class TSVManipulations {
 			if (error2>0)
 				System.out.println(MyUtils.indent(indentationLevel+1) + "Error) Number of records with repeated keyField: " + Constants.integerFormatter.format(error2));
 
-			if (logicalOperand == LogicalOperand.NO_CONDITION)
+			if (logicalOperation == LogicalOperation.NO_CONDITION)
 				System.out.println(MyUtils.indent(indentationLevel+1) + "Number of records read: " + Constants.integerFormatter.format(matchedRec));
 			else{
 				System.out.println(MyUtils.indent(indentationLevel+1) + "Number of records read (matched with the provided conditions): " + Constants.integerFormatter.format(matchedRec));
@@ -105,13 +105,13 @@ public class TSVManipulations {
 			e.printStackTrace();
 		}
 		if (wrapOutputInLines)
-			System.out.println("-----------------------------------");
+			MyUtils.println("-----------------------------------", indentationLevel);
 		return tsvRecordsHashMap;
 	}
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	public static HashSet<String> readNonUniqueFieldFromTSV_OnlyRepeatEachEntryOnce(String inputPathAndFileName,
 			int keyFieldNumber, int totalFieldsCount,
-			LogicalOperand logicalOperand, 
+			LogicalOperation logicalOperation, 
 			int field1Number, ConditionType condition1Type, String field1Value, FieldType field1Type, 
 			int field2Number, ConditionType condition2Type, String field2Value, FieldType field2Type, 
 			boolean wrapOutputInLines, int indentationLevel, int showProgressInterval, long testOrReal, int writeMessageStep){//This method reads only one field in TSV lines into HashSet. The key is a non-unique field. If it sees repeats of that field, just ignores it. 
@@ -136,7 +136,7 @@ public class TSVManipulations {
 				if (fields.length != totalFieldsCount)
 					error1++;
 				else{
-					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperand, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
+					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperation, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
 					if (recordShouldBeRead){
 						keyField = fields[keyFieldNumber];
 						if (!tsvfieldHashSet.contains(keyField))
@@ -155,7 +155,7 @@ public class TSVManipulations {
 			}//while ((s=br....
 			if (error1>0)
 				System.out.println(MyUtils.indent(indentationLevel) + "Error) Number of records with !=" + totalFieldsCount + " fields: " + error1);
-			if (logicalOperand == LogicalOperand.NO_CONDITION)
+			if (logicalOperation == LogicalOperation.NO_CONDITION)
 				System.out.println(MyUtils.indent(indentationLevel) + "Number of records read: " + Constants.integerFormatter.format(matchedRec));
 			else{
 				System.out.println(MyUtils.indent(indentationLevel) + "Number of records read (matched with the provided conditions): " + Constants.integerFormatter.format(matchedRec));
@@ -178,7 +178,7 @@ public class TSVManipulations {
 	//--------------------------------------------------------------------------------------------------------------------------------------------	
 	public static HashSet<String> readUniqueFieldFromTSV(String inputPathAndFileName, 
 			int keyFieldNumber, int totalFieldsCount,
-			LogicalOperand logicalOperand, 
+			LogicalOperation logicalOperation, 
 			int field1Number, ConditionType condition1Type, String field1Value, FieldType field1Type, 
 			int field2Number, ConditionType condition2Type, String field2Value, FieldType field2Type, 
 			boolean wrapOutputInLines, int indentationLevel, int showProgressInterval, long testOrReal, int writeMessageStep){//This method reads only one field in TSV lines into HashSet. The key is a unique field. If it sees repeats of that field, just ignores it but increments the number of errors and finally reports it. 
@@ -203,7 +203,7 @@ public class TSVManipulations {
 				if (fields.length != totalFieldsCount)
 					error1++;
 				else{
-					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperand, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
+					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperation, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
 					if (recordShouldBeRead){
 						keyField = fields[keyFieldNumber];
 						if (!tsvfieldHashSet.contains(keyField))
@@ -226,7 +226,7 @@ public class TSVManipulations {
 				System.out.println(MyUtils.indent(indentationLevel) + "Error) Number of records with != " + totalFieldsCount + " fields: " + error1);
 			if (error2>0)
 				System.out.println(MyUtils.indent(indentationLevel) + "Error) Number of records with duplicate keyfield: " + error2);
-			if (logicalOperand == LogicalOperand.NO_CONDITION)
+			if (logicalOperation == LogicalOperation.NO_CONDITION)
 				System.out.println(MyUtils.indent(indentationLevel) + "Number of records read: " + Constants.integerFormatter.format(matchedRec));
 			else{
 				System.out.println(MyUtils.indent(indentationLevel) + "Number of records read (matched with the provided conditions): " + Constants.integerFormatter.format(matchedRec));
@@ -302,7 +302,7 @@ public class TSVManipulations {
 	//--------------------------------------------------------------------------------------------------------------------------------------------
 	public static TreeMap<String, ArrayList<String[]>> readNonUniqueKeyAndItsValueFromTSV(String inputPathAndFileName, FileManipulationResult[] fMRArray, Set<String> keySetToCheckExistenceOfKeyField, 
 			int keyFieldNumber, Constants.SortOrder sortOrder, int totalFieldsCount, String fieldNumbersToBeRead_separatedByDollar, 
-			Constants.LogicalOperand logicalOperand, 
+			Constants.LogicalOperation logicalOperation, 
 			int field1Number, ConditionType condition1Type, String field1Value, FieldType field1Type, 
 			int field2Number, ConditionType condition2Type, String field2Value, FieldType field2Type, 
 			boolean wrapOutputInLines, int showProgressInterval, int indentationLevel, 
@@ -368,7 +368,7 @@ public class TSVManipulations {
 				if (fields.length != totalFieldsCount)
 					error++;
 				else{
-					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperand, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
+					recordShouldBeRead = MyUtils.runLogicalComparison(logicalOperation, fields[field1Number], condition1Type, field1Value, field1Type, fields[field2Number], condition2Type, field2Value, field2Type);
 					if (recordShouldBeRead){
 						keyField = fields[keyFieldNumber];
 						if (keySetToCheckExistenceOfKeyField == null || keySetToCheckExistenceOfKeyField.contains(keyField)){
@@ -425,7 +425,7 @@ public class TSVManipulations {
 			if (equalObjectsFound>0)
 				System.out.println(MyUtils.indent(indentationLevel+1) + "Hint) Number of repeated TSV records (ignored): " + equalObjectsFound);
 
-			if (logicalOperand == LogicalOperand.NO_CONDITION)
+			if (logicalOperation == LogicalOperation.NO_CONDITION)
 				System.out.println(MyUtils.indent(indentationLevel+1) + "Number of records read: " + Constants.integerFormatter.format(matchedRec));
 			else
 			{
@@ -455,14 +455,17 @@ public class TSVManipulations {
 			int totalFieldsCount, String[] titles,
 			boolean wrapOutputInLines, int showProgressInterval, int indentationLevel, long testOrReal, String writeMessageStep){
 		if (wrapOutputInLines)
-			System.out.println("-----------------------------------");
+			MyUtils.println("-----------------------------------", indentationLevel);
 		FileManipulationResult fCR = new FileManipulationResult();
 		try{
 			System.out.println(MyUtils.indent(indentationLevel) + writeMessageStep + "- Writing file \"" + outputPathAndFileName + "\"");
 			System.out.println(MyUtils.indent(indentationLevel+1) +  "Started ...");
 			int i = 0;
 			FileWriter writer = new FileWriter(outputPathAndFileName);
-			writer.append(titles[0] + Constants.SEPARATOR_FOR_FIELDS_IN_TSV_FILE + titles[1] + "\n");
+			writer.append(titles[0]);
+			for (int j=1; j<totalFieldsCount; j++)
+				writer.append(Constants.SEPARATOR_FOR_FIELDS_IN_TSV_FILE + titles[j]);
+			writer.append("\n");
 			for(Map.Entry<String,Long> entry : counts.entrySet()) {
 				  String key = entry.getKey();
 				  Long value = entry.getValue();
@@ -481,7 +484,7 @@ public class TSVManipulations {
 			fCR.errors = 1;
 		}
 		if (wrapOutputInLines)
-			System.out.println("-----------------------------------");
+			MyUtils.println("-----------------------------------", indentationLevel);
 		return fCR;
 	}//saveCountsAsTSVFile().
 	//--------------------------------------------------------------------------------------------------------------------------------------------
@@ -790,7 +793,7 @@ public class TSVManipulations {
 			
 			TreeMap<String, String[]> primaryKeyRecords = readUniqueKeyAndItsValueFromTSV(
 					primaryKeyInputPathAndFileName, null, PrimaryKeyFieldNumber, primaryKeyTotalFieldsNumber, "ALL", 
-					LogicalOperand.NO_CONDITION, 0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
+					LogicalOperation.NO_CONDITION, 0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
 					false, showProgressInterval, indentationLevel+1, testOrReal, writeMessageStep+"-1");
 			//TreeMap<String, String[]> foreignKeyRecords = readUniqueKeyAndItsValueFromTSV(foreignKeyInputTSVPath, foreignKeyInputTSVFile, ForeignKeyFieldNumber, foreignKeyTotalFieldsNumber, ConditionType.NO_CONDITION, 0, "", 0, "", 100000, testOrReal, 2);
 			System.out.println(MyUtils.indent(indentationLevel+1) + writeMessageStep+"-2- Producing output (foreign key replaced by value) ...");
@@ -972,7 +975,7 @@ public class TSVManipulations {
 			fMRArray[0] = new FileManipulationResult();
 			TreeMap<String, ArrayList<String[]>> t1Records = readNonUniqueKeyAndItsValueFromTSV(
 					inputPath1 + "\\" + inputTSV1, fMRArray, null, t1KeyNumber, SortOrder.DEFAULT_FOR_STRING, tSVTitles1.length, neededFieldNumbers1, 
-					LogicalOperand.NO_CONDITION, 
+					LogicalOperation.NO_CONDITION, 
 					0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
 					0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
 					false, showProgressInterval, indentationLevel+2, testOrReal, writeMessageStep+"-1-1");
@@ -1001,7 +1004,7 @@ public class TSVManipulations {
 			//Reading needed fields from TSV1:
 			TreeMap<String, ArrayList<String[]>> t2Records = readNonUniqueKeyAndItsValueFromTSV(
 					inputPath2 + "\\" + inputTSV2, fMRArray, null, t2KeyNumber, SortOrder.DEFAULT_FOR_STRING, tSVTitles2.length, neededFieldNumbers2, 
-					LogicalOperand.NO_CONDITION, 
+					LogicalOperation.NO_CONDITION, 
 					0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
 					0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, 
 					false, showProgressInterval, indentationLevel+2, testOrReal, writeMessageStep+"-2-1");

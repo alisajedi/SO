@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import Utils.Constants.ConditionType;
 import Utils.Constants.FieldType;
-import Utils.Constants.LogicalOperand;
+import Utils.Constants.LogicalOperation;
 
 public class MyUtils {
 	//----------------------------------------------------------------------------------------------------------------
@@ -121,21 +121,21 @@ public class MyUtils {
 		return result;
 	}//compareTwoStringArrays().
 	//------------------------------------------------------------------------------------------------------------------------------------------------
-	public static boolean runLogicalComparison(LogicalOperand logicalOperand, 
+	public static boolean runLogicalComparison(LogicalOperation logicalOperation, 
 			String value1A, ConditionType condition1Type, String value1B, FieldType field1Type, 
 			String value2A, ConditionType condition2Type, String value2B, FieldType field2Type){
 		boolean result = false;
-		if (logicalOperand == LogicalOperand.NO_CONDITION)
+		if (logicalOperation == LogicalOperation.NO_CONDITION)
 			result = true;
 		else{
 			boolean resultOfCondition1 = compareTwoStringsBasedOnconditionType(value1A, condition1Type, value1B, field1Type);
 			if (resultOfCondition1)
-				if (logicalOperand == LogicalOperand.AND)
+				if (logicalOperation == LogicalOperation.AND)
 					result = compareTwoStringsBasedOnconditionType(value2A, condition2Type, value2B, field2Type);
 				else
 					result = true;
 			else //i.e., when resultOfCondition1 is not true:
-				if (logicalOperand == LogicalOperand.OR)
+				if (logicalOperation == LogicalOperation.OR)
 					result = compareTwoStringsBasedOnconditionType(value2A, condition2Type, value2B, field2Type);
 				else
 					result = false;

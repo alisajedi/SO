@@ -14,21 +14,9 @@ import com.google.common.collect.ImmutableMap;
 //import com.google.gwt.thirdparty.guava.common.collect.ImmutableMap;
 
 public class Constants { 
-	//GH Dataset:
-    //SQL files:
-	public static final String DATASET_DIRECTORY_GH_MySQL = "C:\\2-Study\\Influentials\\Data Set\\MySQL-20150401\\SQL";
-    public static final String DATASET_EXTERNAL_DIRECTORY_GH_MySQL = "E:\\Influentials\\DataSet\\MySQL-20150401\\SQL";
-    //TSV files:
-    public static final String DATASET_DIRECTORY_GH_TSV = "C:\\2-Study\\Influentials\\Data Set\\MySQL-20150401\\TSV";
-    public static final String DATASET_DIRECTORY_GH_TSV__JUST_NUMERIC_FIELDS = "C:\\2-Study\\Influentials\\Data Set\\MySQL-20150401\\TSV\\JustNumericFields";
-    public static final String DATASET_DIRECTORY_GH_TSV__JUST_NUMERIC_FIELDS__Aggregated = "C:\\2-Study\\Influentials\\Data Set\\MySQL-20150401\\TSV\\JustNumericFields\\Aggregated";
-    public static final String DATASET_DIRECTORY_GH_TSV__LANGUAGE_STUDY = "C:\\2-Study\\Influentials\\Data Set\\MySQL-20150401\\TSV\\LanguagesStudy";
-
-    public static final String DATASET_EXTERNAL_DIRECTORY_GH_TSV = "E:\\Influentials\\DataSet\\MySQL-20150401\\TSV";
-    public static final String DATASET_EXTERNAL_DIRECTORY_GH_TSV__JUST_NUMERIC_FIELDS = "E:\\Influentials\\DataSet\\MySQL-20150401\\TSV\\JustNumericFields";
-    public static final String DATASET_EXTERNAL_DIRECTORY_GH_TSV__JUST_NUMERIC_FIELDS__AGGREGATED = "E:\\Influentials\\DataSet\\MySQL-20150401\\TSV\\JustNumericFields\\Aggregated";
-    public static final String DATASET_EXTERNAL_DIRECTORY_GH_TSV__LANGUAGE_STUDY = "E:\\Influentials\\DataSet\\MySQL-20150401\\TSV\\LanguagesStudy";
-  
+	public static final String DATASET_DIRECTORY_TSV = "C:\\2-Study\\BugTriaging\\Data Sets\\2- SO\\SO-20140502-WithoutEmailHash";
+	public static final String DATASET_DIRECTORY_TSV_OUTPUT = "C:\\2-Study\\Expertise Graph\\Data Set\\Output";
+	public static final String TAGS_SEPARATOR = ";;";
   //JustNumberFields (No text field, no dateTime field):
     public static final Map<String, List<String>> DUMP_TABLES_AND_THEIR_FIELDS = ImmutableMap.<String, List<String>> builder() 
 	        .put("commit_comments:neededFields", Arrays.asList(new String[] { "id", "commit_id", "user_id", "line", "position", "comment_id" }))
@@ -266,7 +254,7 @@ public class Constants {
 		LONG, STRING, NOT_IMPORTANT
 	}
 
-	public enum LogicalOperand { 
+	public enum LogicalOperation { 
 		NO_CONDITION, AND, OR, IGNORE_THE_SECOND_OPERAND
 	}
 
