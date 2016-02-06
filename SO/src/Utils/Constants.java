@@ -14,8 +14,8 @@ import com.google.common.collect.ImmutableMap;
 //import com.google.gwt.thirdparty.guava.common.collect.ImmutableMap;
 
 public class Constants { 
-	public static final String DATASET_DIRECTORY_TSV = "C:\\2-Study\\BugTriaging\\Data Sets\\2- SO\\SO-20140502-WithoutEmailHash";
-	public static final String DATASET_DIRECTORY_TSV_OUTPUT = "C:\\2-Study\\Expertise Graph\\Data Set\\Output";
+	public static final String DATASET_DIRECTORY_TSV = "C:\\2-Study\\Expertise Graph\\Data Set\\20160104";
+	public static final String DATASET_DIRECTORY_TSV_OUTPUT = "C:\\2-Study\\Expertise Graph\\Data Set\\20160104\\Output";
 	public static final String TAGS_SEPARATOR = ";;";
   //JustNumberFields (No text field, no dateTime field):
     public static final Map<String, List<String>> DUMP_TABLES_AND_THEIR_FIELDS = ImmutableMap.<String, List<String>> builder() 

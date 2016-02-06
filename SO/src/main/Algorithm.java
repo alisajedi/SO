@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 
 
+
 import Utils.Constants;
 import Utils.MyUtils;
 //import Utils.Constants;
@@ -50,6 +51,11 @@ public class Algorithm {
 				postsTSVInputPathAndFileName, null, 0, 9, "5", LogicalOperation.IGNORE_THE_SECOND_OPERAND, 1, ConditionType.EQUALS, "1", 
 				FieldType.NOT_IMPORTANT, 0, ConditionType.NOTHING, "", FieldType.NOT_IMPORTANT, true, showProgressInterval, 2, testOrReal, "1");
 		TreeMap<String, Long> coOccurrences = new TreeMap<String, Long>();
+
+		MyUtils.println("-----------------------------------", 2);
+		MyUtils.println("2- Calculating the co-Occurrences:", 2);
+		MyUtils.println("Started ...", 3);
+		int i = 0;
 		for (Map.Entry<String, String[]> entry: posts1ById.entrySet()){
 			String s = entry.getValue()[0];
 			//Removing the "[" and "]" from the sides:
@@ -57,10 +63,15 @@ public class Algorithm {
 			//Separate the tags:
 			String[] tags = s.split(Constants.TAGS_SEPARATOR);
 			//Count the co-occurrences:
-			for (int i=1; i<tags.length; i++)
-				for (int j=0; j<i; j++)
-					addCoOccurrence(tags[i], tags[j], coOccurrences);
+			for (int j=1; j<tags.length; j++)
+				for (int k=0; k<j; k++)
+					addCoOccurrence(tags[j], tags[k], coOccurrences);
+			i++;
+			if (i % showProgressInterval == 0)
+				MyUtils.println(Constants.integerFormatter.format(i), 3);
 		}
+		MyUtils.println("Finished.", 3);
+		MyUtils.println("-----------------------------------", 2);
 		
 		//Testing:
 //		for (Map.Entry<String, Long> entry: coOccurrences.entrySet())
@@ -69,7 +80,7 @@ public class Algorithm {
 		//Saving:
 		String[] titles = {"Tag1", "Tag2", "CoOccurrence"};
 		TSVManipulations.saveKeyAndValuesAsTSVFile(outputPathAndFileName, coOccurrences, 3, titles, true, 
-				showProgressInterval, 2, testOrReal, "2");
+				showProgressInterval, 2, testOrReal, "3");
 
 		Date d2 = new Date();
 		System.out.println();
@@ -83,7 +94,7 @@ public class Algorithm {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		extractCoOccurrencesOfTagsInDataSet(Constants.DATASET_DIRECTORY_TSV + "\\Posts.tsv", Constants.DATASET_DIRECTORY_TSV_OUTPUT + "\\coOccurrences.tsv", 
-				500000, Constants.THIS_IS_REAL);
+				500, Constants.THIS_IS_REAL);
 //		System.out.println(Integer.parseInt("3"));
 	}
 

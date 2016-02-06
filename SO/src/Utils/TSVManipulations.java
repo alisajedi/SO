@@ -44,7 +44,7 @@ public class TSVManipulations {
 			//Reading posts and adding <repoId, totalNumberOfMembers> in a hashMap:
 			br = new BufferedReader(new FileReader(inputPathAndFileName)); 
 			MyUtils.println(writeMessageStep + "- Parsing " + inputPathAndFileName + ":", indentationLevel);
-			MyUtils.println("Started ...", indentationLevel);
+			MyUtils.println("Started ...", indentationLevel+1);
 			int error1 = 0, error2 = 0, unmatchedRecords = 0;;
 			int i=0, matchedRec = 0;
 			String s, keyField;
